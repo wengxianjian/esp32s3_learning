@@ -20,7 +20,7 @@
 ### M1 基础外设
 | 资源 | 宏前缀 | 组件目录 | 指南章节 | 状态 |
 |------|--------|----------|----------|------|
-| KEY 按键 | `BSP_KEY` | `components/bsp_key` | 第十一章 | ⬜ 待学习 |
+| KEY 按键 | `BSP_KEY0` | `components/bsp_key` | 第十一章 | ✅ 已完成 |
 | EXIT 外部中断 | `BSP_EXIT` | `components/bsp_key` | 第十二章 | ⬜ 待学习 |
 | UART 串口 | `BSP_UART` | `components/bsp_uart` | 第十三章 | ⬜ 待学习 |
 | ESPTimer 软定时器 | `BSP_ESPTIMER` | `components/bsp_timer` | 第十四章 | ⬜ 待学习 |

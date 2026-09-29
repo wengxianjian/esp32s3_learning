@@ -6,6 +6,9 @@ choice DEMO_RESOURCE
 
 config DEMO_LED
     bool "LED (GPIO output)"
+
+config DEMO_KEY
+    bool "KEY (GPIO input, press BOOT to toggle LED)"
 endchoice
 
 endmenu
