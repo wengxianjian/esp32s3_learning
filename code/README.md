@@ -32,12 +32,16 @@ code/
 
 ## 如何运行
 
+本开发板有**两路 USB**：CH340 串口（`/dev/cu.usbserial-*`）与 **ESP32-S3 原生 USB-Serial-JTAG**（`/dev/cu.usbmodem*`）。推荐用原生 USB，**自动下载/复位，全程免手动按键**。
+
 ```bash
 cd code
-idf.py set-target esp32s3      # 首次
-idf.py menuconfig              # 选择要运行的资源 demo（DNESP32S3 Learning Demo）
-idf.py build flash monitor     # 编译、烧录、打开串口监视
+idf.py set-target esp32s3                # 首次
+idf.py menuconfig                        # 选择要运行的资源 demo（DNESP32S3 Learning Demo）
+idf.py -p /dev/cu.usbmodem* flash monitor # 编译+烧录+串口监视（免按键）
 ```
+
+> 工程已默认配置：目标 `esp32s3`、16MB Flash（DIO）、`CONFIG_ESPTOOLPY_BEFORE_USB_RESET`、控制台走 USB-Serial-JTAG。详见 `components/bsp_led/NOTES.md`。
 
 ## 当前进度
 

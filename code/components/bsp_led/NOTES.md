@@ -36,4 +36,22 @@
 
 ## 验证结果
 
-（首次烧录后补充：LED 是否按预期闪烁、有无需要修正的点）
+- ✅ 编译通过，烧录成功（bootloader + 分区表 + app 均写入并校验通过）
+- ✅ LED 按 500ms 间隔正常闪烁（低电平点亮，IO1 正确）
+- ✅ 启动日志确认：`bsp_led: LED initialized on GPIO 1`
+- 板载 Flash 规格：16MB、DIO 模式（已配置到 `sdkconfig.defaults`）
+
+## 烧录方式（免手动按键）
+
+本开发板有**两路 USB**：
+
+| 端口 | 设备 | 特点 |
+|------|------|------|
+| USB_UART | `/dev/cu.usbserial-*`（CH340） | DTR/RTS 自动下载电路在 macOS 上不可靠，需手动 BOOT+RESET |
+| USB | `/dev/cu.usbmodem*`（原生 USB-Serial-JTAG） | **自带可靠自动下载/复位，全程免按键，且速度更快** |
+
+推荐统一走 usbmodem（工程已配置 `CONFIG_ESPTOOLPY_BEFORE_USB_RESET` 与控制台走 USB-Serial-JTAG）：
+
+```bash
+idf.py -p /dev/cu.usbmodem* build flash monitor
+```
