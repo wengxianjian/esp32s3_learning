@@ -33,6 +33,7 @@
 
 - 引脚必须先在 `board.h` 定义，驱动里不写死 `GPIO_NUM_1`，保证 grep 宏可回溯。
 - `bsp_led_set()` 里要做有效电平换算，避免调用方误以为"true=高电平"。
+- **`bsp_led_toggle()` 不要用 `gpio_get_level()` 读回纯输出引脚电平**：LED 引脚是纯输出（启动日志 `InputEn:0`），此时 `gpio_get_level()` 读回值恒为 0，导致翻转永远写成「灭」。改用静态变量 `s_led_on` 记录逻辑状态。
 
 ## 验证结果
 

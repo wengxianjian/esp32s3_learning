@@ -4,6 +4,7 @@
 #include "esp_log.h"
 
 static const char *TAG = "bsp_led";
+static bool s_led_on = false;   /* 记录 LED 逻辑状态，避免读回纯输出引脚电平 */
 
 esp_err_t bsp_led_init(void)
 {
@@ -31,10 +32,11 @@ esp_err_t bsp_led_set(bool on)
 {
     /* 根据有效电平换算实际 GPIO 电平 */
     uint32_t level = (BSP_LED0_ACTIVE_LEVEL == 0) ? (on ? 0 : 1) : (on ? 1 : 0);
+    s_led_on = on;
     return gpio_set_level(BSP_LED0_GPIO, level);
 }
 
 esp_err_t bsp_led_toggle(void)
 {
-    return gpio_set_level(BSP_LED0_GPIO, !gpio_get_level(BSP_LED0_GPIO));
+    return bsp_led_set(!s_led_on);
 }
