@@ -1,0 +1,18 @@
+# ESP-IDF 构建产物
+code/build/
+code/sdkconfig
+code/sdkconfig.old
+code/managed_components/
+
+# IDE / 工具缓存
+.codebuddy/
+.cache/
+.idea/
+.vscode/
+*.swp
+
+# 参考硬件资料（正点原子版权资料 + 大文件，不入库）
+ref/
+
+# macOS
+.DS_Store

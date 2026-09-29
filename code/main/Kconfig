@@ -1,0 +1,11 @@
+menu "DNESP32S3 Learning Demo"
+
+choice DEMO_RESOURCE
+    prompt "Select resource demo to run"
+    default DEMO_LED
+
+config DEMO_LED
+    bool "LED (GPIO output)"
+endchoice
+
+endmenu
