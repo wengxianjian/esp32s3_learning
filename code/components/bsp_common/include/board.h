@@ -137,6 +137,20 @@ extern "C" {
 #define BSP_QMA6100P_ADDR         0x12     /* QMA6100P 7 位地址 */
 
 /* ============================================================
+ * SPI2 总线 + SPI LCD（ILI9341，2.4 寸 320x240）
+ * 指南：第二十二章 SPI_LCD实验
+ * ============================================================ */
+#define BSP_SPI2_MOSI_GPIO        GPIO_NUM_11
+#define BSP_SPI2_SCLK_GPIO        GPIO_NUM_12
+#define BSP_SPI2_MISO_GPIO        GPIO_NUM_13
+#define BSP_LCD_CS_GPIO           GPIO_NUM_21
+#define BSP_LCD_DC_GPIO           GPIO_NUM_40
+#define BSP_LCD_RST_IO            0x0400   /* XL9555 P12 SPI_LCD 复位 */
+#define BSP_LCD_PWR_IO            0x0800   /* XL9555 P13 SPI_LCD 背光 */
+#define BSP_LCD_WIDTH             320
+#define BSP_LCD_HEIGHT            240
+
+/* ============================================================
  * RTC / RNG 为芯片内部资源，无引脚宏。
  * 后续资源宏在此按「每学习一个资源就补充一段」的规则追加。
  * ============================================================ */

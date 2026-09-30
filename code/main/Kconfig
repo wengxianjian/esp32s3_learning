@@ -57,6 +57,9 @@ config DEMO_AP3216C
 
 config DEMO_QMA6100P
     bool "I2C QMA6100P (3-axis accelerometer)"
+
+config DEMO_LCD
+    bool "SPI LCD (ILI9341, color fill)"
 endchoice
 
 endmenu

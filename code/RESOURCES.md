@@ -42,7 +42,7 @@
 | I2C OLED | `BSP_OLED` | `components/bsp_i2c` | 第二十一章 | ✅ 已完成 |
 | AP3216C 光强/接近 | `BSP_AP3216C` | `components/bsp_i2c` | 第二十五章 | ✅ 已完成 |
 | QMA6100P 加速度 | `BSP_QMA6100P` | `components/bsp_i2c` | 第三十二章 | ✅ 已完成 |
-| SPI 总线 / SPI LCD | `BSP_SPI2` | `components/bsp_spi` | 第二十二章 | ⬜ 待学习 |
+| SPI 总线 / SPI LCD | `BSP_SPI2` | `components/bsp_spi` | 第二十二章 | ✅ 已完成 |
 | 单总线 DS18B20 | `BSP_DS18B20` | `components/bsp_1wire` | 第二十九章 | ⬜ 待学习 |
 | 单总线 DHT11 | `BSP_DHT11` | `components/bsp_1wire` | 第三十章 | ⬜ 待学习 |
 | 红外接收 | `BSP_IR_RX` | `components/bsp_infrared` | 第二十六章 | ⬜ 待学习 |

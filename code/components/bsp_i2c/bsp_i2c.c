@@ -4,9 +4,14 @@
 #include "esp_log.h"
 
 static const char *TAG = "bsp_i2c";
+static bool s_i2c_inited = false;
 
 esp_err_t bsp_i2c_init(void)
 {
+    if (s_i2c_inited) {
+        return ESP_OK;   /* 已初始化，幂等 */
+    }
+
     i2c_config_t cfg = {
         .mode = I2C_MODE_MASTER,
         .sda_io_num = BSP_I2C0_SDA_GPIO,
@@ -30,6 +35,7 @@ esp_err_t bsp_i2c_init(void)
 
     ESP_LOGI(TAG, "I2C0 init: SDA=GPIO%d SCL=GPIO%d %d Hz",
              BSP_I2C0_SDA_GPIO, BSP_I2C0_SCL_GPIO, BSP_I2C0_FREQ_HZ);
+    s_i2c_inited = true;
     return ESP_OK;
 }
 

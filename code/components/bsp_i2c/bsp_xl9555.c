@@ -17,10 +17,13 @@ static uint16_t s_config = 0;
 
 esp_err_t bsp_xl9555_init(void)
 {
+    esp_err_t ret = bsp_i2c_init();
+    if (ret != ESP_OK) return ret;
+
     /* 配置：P00/P01(AP_INT/QMA_INT)、P14~P17(KEY0~KEY3) 为输入，其余为输出 */
     s_config = 0xF003;
-    esp_err_t ret = bsp_i2c_write_reg(BSP_XL9555_ADDR, XL9555_CONFIG_PORT0_REG,
-                                      (uint8_t[]){s_config & 0xFF}, 1);
+    ret = bsp_i2c_write_reg(BSP_XL9555_ADDR, XL9555_CONFIG_PORT0_REG,
+                            (uint8_t[]){s_config & 0xFF}, 1);
     if (ret != ESP_OK) return ret;
     ret = bsp_i2c_write_reg(BSP_XL9555_ADDR, XL9555_CONFIG_PORT1_REG,
                             (uint8_t[]){(s_config >> 8) & 0xFF}, 1);
