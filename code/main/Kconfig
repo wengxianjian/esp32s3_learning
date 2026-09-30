@@ -12,6 +12,9 @@ config DEMO_KEY
 
 config DEMO_EXIT
     bool "EXIT (GPIO external interrupt, press BOOT to toggle LED)"
+
+config DEMO_UART
+    bool "UART (serial echo + periodic message)"
 endchoice
 
 endmenu

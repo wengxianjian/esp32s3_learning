@@ -16,6 +16,7 @@
 #pragma once
 
 #include "driver/gpio.h"
+#include "driver/uart.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -37,6 +38,16 @@ extern "C" {
 #define BSP_KEY0_GPIO            GPIO_NUM_0
 #define BSP_KEY0_ACTIVE_LEVEL    0       /* 0=按下为低电平 */
 #define BSP_KEY0_INTR_TYPE       GPIO_INTR_NEGEDGE   /* 按键外部中断：下降沿触发 */
+
+/* ============================================================
+ * UART（串口）
+ * 指南：第十三章 UART实验
+ * 使用 UART0，经板载 USB 转串口芯片（CH340）与 PC 通信
+ * ============================================================ */
+#define BSP_UART0_NUM            UART_NUM_0
+#define BSP_UART0_TX_GPIO        GPIO_NUM_43
+#define BSP_UART0_RX_GPIO        GPIO_NUM_44
+#define BSP_UART0_BAUD_RATE      115200
 
 /* ============================================================
  * 后续资源宏在此按「每学习一个资源就补充一段」的规则追加。
