@@ -18,6 +18,9 @@ config DEMO_UART
 
 config DEMO_ESPTIMER
     bool "ESPTimer (software timer, toggle LED)"
+
+config DEMO_GPTIMER
+    bool "GPTimer (hardware timer, toggle LED)"
 endchoice
 
 endmenu

@@ -24,7 +24,7 @@
 | EXIT 外部中断 | `BSP_KEY0` | `components/bsp_key` | 第十二章 | ✅ 已完成 |
 | UART 串口 | `BSP_UART0` | `components/bsp_uart` | 第十三章 | ✅ 已完成 |
 | ESPTimer 软定时器 | `BSP_ESPTIMER` | `components/bsp_timer` | 第十四章 | ✅ 已完成 |
-| GPTimer 硬定时器 | `BSP_GPTIMER` | `components/bsp_timer` | 第十五章 | ⬜ 待学习 |
+| GPTimer 硬定时器 | `BSP_GPTIMER` | `components/bsp_timer` | 第十五章 | ✅ 已完成 |
 | 看门狗 | `BSP_WDT` | `components/bsp_timer` | 第十六章 | ⬜ 待学习 |
 | SW_PWM 软件 PWM | `BSP_SWPWM` | `components/bsp_pwm` | 第十七章 | ⬜ 待学习 |
 | HW_PWM 硬件 PWM(LEDC) | `BSP_HWPWM` | `components/bsp_pwm` | 第十八章 | ⬜ 待学习 |

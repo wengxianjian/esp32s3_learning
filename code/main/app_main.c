@@ -25,6 +25,9 @@ void app_main(void)
 #elif defined(CONFIG_DEMO_ESPTIMER)
     ESP_LOGI(TAG, "Running demo: ESPTimer");
     bsp_esptimer_demo();
+#elif defined(CONFIG_DEMO_GPTIMER)
+    ESP_LOGI(TAG, "Running demo: GPTimer");
+    bsp_gptimer_demo();
 #else
     ESP_LOGE(TAG, "No demo selected! Run 'idf.py menuconfig' to pick a demo.");
 #endif
