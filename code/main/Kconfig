@@ -42,6 +42,9 @@ config DEMO_RNG
 
 config DEMO_TSENS
     bool "TSENS (internal temperature sensor)"
+
+config DEMO_XL9555
+    bool "I2C XL9555 (IO expander, toggle buzzer)"
 endchoice
 
 endmenu

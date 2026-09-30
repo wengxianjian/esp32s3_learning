@@ -6,6 +6,7 @@
 #include "bsp_pwm.h"
 #include "bsp_adc.h"
 #include "bsp_rtc_rng.h"
+#include "bsp_i2c.h"
 
 static const char *TAG = "main";
 
@@ -52,6 +53,9 @@ void app_main(void)
 #elif defined(CONFIG_DEMO_TSENS)
     ESP_LOGI(TAG, "Running demo: TSENS");
     bsp_tsens_demo();
+#elif defined(CONFIG_DEMO_XL9555)
+    ESP_LOGI(TAG, "Running demo: XL9555");
+    bsp_xl9555_demo();
 #else
     ESP_LOGE(TAG, "No demo selected! Run 'idf.py menuconfig' to pick a demo.");
 #endif
