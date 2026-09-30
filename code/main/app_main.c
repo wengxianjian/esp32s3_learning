@@ -14,6 +14,8 @@
 #include "bsp_lcd.h"
 #include "bsp_ds18b20.h"
 #include "bsp_dht11.h"
+#include "bsp_ir_rx.h"
+#include "bsp_ir_tx.h"
 
 static const char *TAG = "main";
 
@@ -84,6 +86,12 @@ void app_main(void)
 #elif defined(CONFIG_DEMO_DHT11)
     ESP_LOGI(TAG, "Running demo: DHT11");
     bsp_dht11_demo();
+#elif defined(CONFIG_DEMO_IR_RX)
+    ESP_LOGI(TAG, "Running demo: IR RX");
+    bsp_ir_rx_demo();
+#elif defined(CONFIG_DEMO_IR_TX)
+    ESP_LOGI(TAG, "Running demo: IR TX");
+    bsp_ir_tx_demo();
 #else
     ESP_LOGE(TAG, "No demo selected! Run 'idf.py menuconfig' to pick a demo.");
 #endif

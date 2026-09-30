@@ -66,6 +66,12 @@ config DEMO_DS18B20
 
 config DEMO_DHT11
     bool "1-Wire DHT11 (temperature + humidity)"
+
+config DEMO_IR_RX
+    bool "Infrared RX (NEC decode)"
+
+config DEMO_IR_TX
+    bool "Infrared TX (NEC encode)"
 endchoice
 
 endmenu
