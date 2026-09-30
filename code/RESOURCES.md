@@ -38,7 +38,7 @@
 |------|--------|----------|----------|------|
 | I2C 总线 | `BSP_I2C0` | `components/bsp_i2c` | 第十九~二十五章 | ✅ 已完成 |
 | XL9555 IO 扩展 | `BSP_XL9555` | `components/bsp_i2c` | 第十九章 | ✅ 已完成 |
-| I2C EEPROM | `BSP_EEPROM` | `components/bsp_i2c` | 第二十章 | ⬜ 待学习 |
+| I2C EEPROM | `BSP_EEPROM` | `components/bsp_i2c` | 第二十章 | ✅ 已完成 |
 | I2C OLED | `BSP_OLED` | `components/bsp_i2c` | 第二十一章 | ⬜ 待学习 |
 | AP3216C 光强/接近 | `BSP_AP3216C` | `components/bsp_i2c` | 第二十五章 | ⬜ 待学习 |
 | QMA6100P 加速度 | `BSP_QMA6100P` | `components/bsp_i2c` | 第三十二章 | ⬜ 待学习 |

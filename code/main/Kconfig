@@ -45,6 +45,9 @@ config DEMO_TSENS
 
 config DEMO_XL9555
     bool "I2C XL9555 (IO expander, toggle buzzer)"
+
+config DEMO_EEPROM
+    bool "I2C EEPROM (AT24C02, write + readback)"
 endchoice
 
 endmenu
