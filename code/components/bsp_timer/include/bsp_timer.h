@@ -31,6 +31,15 @@ uint32_t bsp_gptimer_get_tick_count(void);
 /** GPTimer 示例：硬件定时器周期翻转 LED */
 void bsp_gptimer_demo(void);
 
+/** 初始化任务看门狗（TWDT），并把当前任务加入监视 */
+esp_err_t bsp_wdt_init(void);
+
+/** 喂狗（重置看门狗计时） */
+void bsp_wdt_feed(void);
+
+/** Watchdog 示例：喂狗 5 次后停止，触发复位 */
+void bsp_wdt_demo(void);
+
 #ifdef __cplusplus
 }
 #endif

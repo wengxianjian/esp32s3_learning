@@ -3,6 +3,7 @@
 #include "bsp_led.h"
 #include "esp_timer.h"
 #include "driver/gptimer.h"
+#include "esp_task_wdt.h"
 #include "esp_log.h"
 
 static const char *TAG = "bsp_timer";
@@ -112,4 +113,38 @@ esp_err_t bsp_gptimer_init(void)
 uint32_t bsp_gptimer_get_tick_count(void)
 {
     return s_gptimer_tick;
+}
+
+/* ==================== 任务看门狗（TWDT） ==================== */
+
+esp_err_t bsp_wdt_init(void)
+{
+    /* TWDT 在系统启动时会被自动初始化，先反初始化再按本工程配置初始化 */
+    esp_task_wdt_deinit();
+
+    esp_task_wdt_config_t cfg = {
+        .timeout_ms = BSP_WDT_TIMEOUT_MS,
+        .idle_core_mask = 0,
+        .trigger_panic = true,    /* 超时触发 panic（打印回溯后重启） */
+    };
+
+    esp_err_t ret = esp_task_wdt_init(&cfg);
+    if (ret != ESP_OK) {
+        ESP_LOGE(TAG, "esp_task_wdt_init failed: %s", esp_err_to_name(ret));
+        return ret;
+    }
+
+    ret = esp_task_wdt_add(NULL);   /* 把当前任务加入看门狗监视 */
+    if (ret != ESP_OK) {
+        ESP_LOGE(TAG, "esp_task_wdt_add failed: %s", esp_err_to_name(ret));
+        return ret;
+    }
+
+    ESP_LOGI(TAG, "TWDT started, timeout = %d ms", BSP_WDT_TIMEOUT_MS);
+    return ESP_OK;
+}
+
+void bsp_wdt_feed(void)
+{
+    esp_task_wdt_reset();
 }

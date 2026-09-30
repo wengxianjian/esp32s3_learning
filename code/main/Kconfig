@@ -21,6 +21,9 @@ config DEMO_ESPTIMER
 
 config DEMO_GPTIMER
     bool "GPTimer (hardware timer, toggle LED)"
+
+config DEMO_WDT
+    bool "Watchdog (task watchdog, feed then reset)"
 endchoice
 
 endmenu

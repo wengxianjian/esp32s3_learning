@@ -60,3 +60,35 @@
 - ✅ 编译通过，烧录成功
 - ✅ 定时器每 500ms 报警：日志 `gptimer fired 3 → 7 → 11 times`（每 2s 递增 4 次）
 - ✅ LED 每 500ms 翻转
+
+---
+
+## Watchdog（任务看门狗 TWDT）
+
+> 指南：第十六章 WATCH_DOG实验
+
+### 原理要点
+
+- **看门狗**：监控系统运行，程序若在规定时间内没「喂狗」（重置计时），看门狗触发复位，防止程序跑飞。
+- ESP32-S3 有中断看门狗（IWDT）和任务看门狗（TWDT / MWDT）。
+- TWDT 监视 FreeRTOS 任务，任务需周期调用 `esp_task_wdt_reset()` 喂狗。
+
+### 关键 API（ESP-IDF `esp_task_wdt.h`）
+
+| 函数 | 作用 |
+|------|------|
+| `esp_task_wdt_init()` | 初始化 TWDT（超时时间/触发方式） |
+| `esp_task_wdt_add()` | 把任务加入监视（NULL=当前任务） |
+| `esp_task_wdt_reset()` | 喂狗（重置计时） |
+| `esp_task_wdt_deinit()` | 反初始化 |
+
+### 踩坑记录
+
+- ESP-IDF 启动时**已自动初始化 TWDT**，直接再 `esp_task_wdt_init()` 会报 `ESP_ERR_INVALID_STATE`（already initialized）。需先 `esp_task_wdt_deinit()` 再按自己的配置初始化。
+- `trigger_panic=false` 走 `esp_restart()` 复位在 ISR 上下文下可能不立即生效（会连续触发多次）；`trigger_panic=true` 走 panic→打印回溯→重启，更干净。
+
+### 验证结果
+
+- ✅ 编译通过，烧录成功
+- ✅ 喂狗 5 次后停止，3s 后 `Task watchdog got triggered` + Backtrace + 复位（`rst:0xc`）
+- ✅ 复位后 demo 自动重启
