@@ -54,6 +54,9 @@ config DEMO_OLED
 
 config DEMO_AP3216C
     bool "I2C AP3216C (ALS/PS/IR sensor)"
+
+config DEMO_QMA6100P
+    bool "I2C QMA6100P (3-axis accelerometer)"
 endchoice
 
 endmenu

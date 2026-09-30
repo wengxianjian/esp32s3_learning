@@ -10,6 +10,7 @@
 #include "bsp_eeprom.h"
 #include "bsp_oled.h"
 #include "bsp_ap3216c.h"
+#include "bsp_qma6100p.h"
 
 static const char *TAG = "main";
 
@@ -68,6 +69,9 @@ void app_main(void)
 #elif defined(CONFIG_DEMO_AP3216C)
     ESP_LOGI(TAG, "Running demo: AP3216C");
     bsp_ap3216c_demo();
+#elif defined(CONFIG_DEMO_QMA6100P)
+    ESP_LOGI(TAG, "Running demo: QMA6100P");
+    bsp_qma6100p_demo();
 #else
     ESP_LOGE(TAG, "No demo selected! Run 'idf.py menuconfig' to pick a demo.");
 #endif
