@@ -30,6 +30,9 @@ config DEMO_SWPWM
 
 config DEMO_HWPWM
     bool "HW PWM (hardware fade, LED breathing)"
+
+config DEMO_ADC
+    bool "ADC (read voltage on GPIO8)"
 endchoice
 
 endmenu

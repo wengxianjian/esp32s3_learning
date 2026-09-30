@@ -18,6 +18,7 @@
 #include "driver/gpio.h"
 #include "driver/uart.h"
 #include "driver/ledc.h"
+#include "esp_adc/adc_oneshot.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -77,6 +78,16 @@ extern "C" {
 #define BSP_PWM_FREQ_HZ           1000     /* PWM 频率 1kHz */
 #define BSP_PWM_DUTY_RES          LEDC_TIMER_10_BIT
 #define BSP_PWM_DUTY_MAX          1023     /* 10 位分辨率对应的最大占空比 */
+
+/* ============================================================
+ * ADC（模数转换）
+ * 指南：第二十四章 ADC实验
+ * 通道：ADC1_CHANNEL_7 = GPIO8（ADC_IN 排针）
+ * ============================================================ */
+#define BSP_ADC_UNIT              ADC_UNIT_1
+#define BSP_ADC_CHANNEL           ADC_CHANNEL_7
+#define BSP_ADC_ATTEN             ADC_ATTEN_DB_11    /* 量程约 0~3.1V */
+#define BSP_ADC_BITWIDTH          ADC_BITWIDTH_12
 
 /* ============================================================
  * 后续资源宏在此按「每学习一个资源就补充一段」的规则追加。
