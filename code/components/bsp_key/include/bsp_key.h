@@ -7,6 +7,7 @@
 #pragma once
 
 #include <stdint.h>
+#include <stdbool.h>
 #include "esp_err.h"
 
 #ifdef __cplusplus
@@ -25,6 +26,15 @@ uint8_t bsp_key_scan(uint8_t mode);
 
 /** KEY 示例：按下 BOOT 键翻转 LED */
 void bsp_key_demo(void);
+
+/** 初始化外部中断（BOOT 键，下降沿触发），并注册 ISR */
+esp_err_t bsp_key_intr_init(void);
+
+/** 中断是否触发过（读取后自动清除标志） */
+bool bsp_key_intr_triggered(void);
+
+/** EXIT 示例：按下 BOOT 键（中断方式）翻转 LED */
+void bsp_exit_demo(void);
 
 #ifdef __cplusplus
 }

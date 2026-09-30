@@ -9,6 +9,9 @@ config DEMO_LED
 
 config DEMO_KEY
     bool "KEY (GPIO input, press BOOT to toggle LED)"
+
+config DEMO_EXIT
+    bool "EXIT (GPIO external interrupt, press BOOT to toggle LED)"
 endchoice
 
 endmenu

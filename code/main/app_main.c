@@ -14,6 +14,9 @@ void app_main(void)
 #elif defined(CONFIG_DEMO_KEY)
     ESP_LOGI(TAG, "Running demo: KEY");
     bsp_key_demo();
+#elif defined(CONFIG_DEMO_EXIT)
+    ESP_LOGI(TAG, "Running demo: EXIT");
+    bsp_exit_demo();
 #else
     ESP_LOGE(TAG, "No demo selected! Run 'idf.py menuconfig' to pick a demo.");
 #endif
