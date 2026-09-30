@@ -3,6 +3,7 @@
 #include "bsp_key.h"
 #include "bsp_uart.h"
 #include "bsp_timer.h"
+#include "bsp_pwm.h"
 
 static const char *TAG = "main";
 
@@ -31,6 +32,12 @@ void app_main(void)
 #elif defined(CONFIG_DEMO_WDT)
     ESP_LOGI(TAG, "Running demo: Watchdog");
     bsp_wdt_demo();
+#elif defined(CONFIG_DEMO_SWPWM)
+    ESP_LOGI(TAG, "Running demo: SW PWM");
+    bsp_swpwm_demo();
+#elif defined(CONFIG_DEMO_HWPWM)
+    ESP_LOGI(TAG, "Running demo: HW PWM");
+    bsp_hwpwm_demo();
 #else
     ESP_LOGE(TAG, "No demo selected! Run 'idf.py menuconfig' to pick a demo.");
 #endif

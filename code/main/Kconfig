@@ -24,6 +24,12 @@ config DEMO_GPTIMER
 
 config DEMO_WDT
     bool "Watchdog (task watchdog, feed then reset)"
+
+config DEMO_SWPWM
+    bool "SW PWM (software duty change, LED breathing)"
+
+config DEMO_HWPWM
+    bool "HW PWM (hardware fade, LED breathing)"
 endchoice
 
 endmenu

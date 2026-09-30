@@ -26,8 +26,8 @@
 | ESPTimer 软定时器 | `BSP_ESPTIMER` | `components/bsp_timer` | 第十四章 | ✅ 已完成 |
 | GPTimer 硬定时器 | `BSP_GPTIMER` | `components/bsp_timer` | 第十五章 | ✅ 已完成 |
 | 看门狗 | `BSP_WDT` | `components/bsp_timer` | 第十六章 | ✅ 已完成 |
-| SW_PWM 软件 PWM | `BSP_SWPWM` | `components/bsp_pwm` | 第十七章 | ⬜ 待学习 |
-| HW_PWM 硬件 PWM(LEDC) | `BSP_HWPWM` | `components/bsp_pwm` | 第十八章 | ⬜ 待学习 |
+| SW_PWM 软件 PWM | `BSP_PWM` | `components/bsp_pwm` | 第十七章 | ✅ 已完成 |
+| HW_PWM 硬件 PWM(LEDC) | `BSP_PWM` | `components/bsp_pwm` | 第十八章 | ✅ 已完成 |
 | ADC | `BSP_ADC` | `components/bsp_adc` | 第二十四章 | ⬜ 待学习 |
 | RTC | `BSP_RTC` | `components/bsp_rtc_rng` | 第二十三章 | ⬜ 待学习 |
 | RNG 随机数 | `BSP_RNG` | `components/bsp_rtc_rng` | 第三十一章 | ⬜ 待学习 |

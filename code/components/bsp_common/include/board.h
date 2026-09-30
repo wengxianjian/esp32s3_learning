@@ -17,6 +17,7 @@
 
 #include "driver/gpio.h"
 #include "driver/uart.h"
+#include "driver/ledc.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -66,6 +67,16 @@ extern "C" {
  * 指南：第十六章 WATCH_DOG实验
  * ============================================================ */
 #define BSP_WDT_TIMEOUT_MS        3000     /* 看门狗超时时间 3s */
+
+/* ============================================================
+ * PWM（LEDC，软/硬件 PWM）
+ * 指南：第十七章 SW_PWM / 第十八章 HW_PWM
+ * ============================================================ */
+#define BSP_PWM_LEDC_TIMER        LEDC_TIMER_0
+#define BSP_PWM_LEDC_CHANNEL      LEDC_CHANNEL_0
+#define BSP_PWM_FREQ_HZ           1000     /* PWM 频率 1kHz */
+#define BSP_PWM_DUTY_RES          LEDC_TIMER_10_BIT
+#define BSP_PWM_DUTY_MAX          1023     /* 10 位分辨率对应的最大占空比 */
 
 /* ============================================================
  * 后续资源宏在此按「每学习一个资源就补充一段」的规则追加。
