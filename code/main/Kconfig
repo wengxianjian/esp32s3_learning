@@ -15,6 +15,9 @@ config DEMO_EXIT
 
 config DEMO_UART
     bool "UART (serial echo + periodic message)"
+
+config DEMO_ESPTIMER
+    bool "ESPTimer (software timer, toggle LED)"
 endchoice
 
 endmenu

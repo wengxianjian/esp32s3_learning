@@ -2,6 +2,7 @@
 #include "bsp_led.h"
 #include "bsp_key.h"
 #include "bsp_uart.h"
+#include "bsp_timer.h"
 
 static const char *TAG = "main";
 
@@ -21,6 +22,9 @@ void app_main(void)
 #elif defined(CONFIG_DEMO_UART)
     ESP_LOGI(TAG, "Running demo: UART");
     bsp_uart_demo();
+#elif defined(CONFIG_DEMO_ESPTIMER)
+    ESP_LOGI(TAG, "Running demo: ESPTimer");
+    bsp_esptimer_demo();
 #else
     ESP_LOGE(TAG, "No demo selected! Run 'idf.py menuconfig' to pick a demo.");
 #endif
