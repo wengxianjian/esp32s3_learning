@@ -33,6 +33,15 @@ config DEMO_HWPWM
 
 config DEMO_ADC
     bool "ADC (read voltage on GPIO8)"
+
+config DEMO_RTC
+    bool "RTC (set and read time)"
+
+config DEMO_RNG
+    bool "RNG (random number)"
+
+config DEMO_TSENS
+    bool "TSENS (internal temperature sensor)"
 endchoice
 
 endmenu

@@ -5,6 +5,7 @@
 #include "bsp_timer.h"
 #include "bsp_pwm.h"
 #include "bsp_adc.h"
+#include "bsp_rtc_rng.h"
 
 static const char *TAG = "main";
 
@@ -42,6 +43,15 @@ void app_main(void)
 #elif defined(CONFIG_DEMO_ADC)
     ESP_LOGI(TAG, "Running demo: ADC");
     bsp_adc_demo();
+#elif defined(CONFIG_DEMO_RTC)
+    ESP_LOGI(TAG, "Running demo: RTC");
+    bsp_rtc_demo();
+#elif defined(CONFIG_DEMO_RNG)
+    ESP_LOGI(TAG, "Running demo: RNG");
+    bsp_rng_demo();
+#elif defined(CONFIG_DEMO_TSENS)
+    ESP_LOGI(TAG, "Running demo: TSENS");
+    bsp_tsens_demo();
 #else
     ESP_LOGE(TAG, "No demo selected! Run 'idf.py menuconfig' to pick a demo.");
 #endif

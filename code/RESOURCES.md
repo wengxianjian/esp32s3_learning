@@ -29,9 +29,9 @@
 | SW_PWM 软件 PWM | `BSP_PWM` | `components/bsp_pwm` | 第十七章 | ✅ 已完成 |
 | HW_PWM 硬件 PWM(LEDC) | `BSP_PWM` | `components/bsp_pwm` | 第十八章 | ✅ 已完成 |
 | ADC | `BSP_ADC` | `components/bsp_adc` | 第二十四章 | ✅ 已完成 |
-| RTC | `BSP_RTC` | `components/bsp_rtc_rng` | 第二十三章 | ⬜ 待学习 |
-| RNG 随机数 | `BSP_RNG` | `components/bsp_rtc_rng` | 第三十一章 | ⬜ 待学习 |
-| 内部温度传感器 | `BSP_TSENS` | `components/bsp_rtc_rng` | 第二十八章 | ⬜ 待学习 |
+| RTC | `BSP_RTC` | `components/bsp_rtc_rng` | 第二十三章 | ✅ 已完成 |
+| RNG 随机数 | `BSP_RNG` | `components/bsp_rtc_rng` | 第三十一章 | ✅ 已完成 |
+| 内部温度传感器 | `BSP_TSENS` | `components/bsp_rtc_rng` | 第二十八章 | ✅ 已完成 |
 
 ### M2 通信总线与 I2C 器件群
 | 资源 | 宏前缀 | 组件目录 | 指南章节 | 状态 |
