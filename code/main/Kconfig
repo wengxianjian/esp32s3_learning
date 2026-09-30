@@ -63,6 +63,9 @@ config DEMO_LCD
 
 config DEMO_DS18B20
     bool "1-Wire DS18B20 (temperature)"
+
+config DEMO_DHT11
+    bool "1-Wire DHT11 (temperature + humidity)"
 endchoice
 
 endmenu
