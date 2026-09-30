@@ -48,6 +48,9 @@ config DEMO_XL9555
 
 config DEMO_EEPROM
     bool "I2C EEPROM (AT24C02, write + readback)"
+
+config DEMO_OLED
+    bool "I2C OLED (SSD1306, display text)"
 endchoice
 
 endmenu

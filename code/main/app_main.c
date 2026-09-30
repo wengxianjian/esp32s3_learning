@@ -8,6 +8,7 @@
 #include "bsp_rtc_rng.h"
 #include "bsp_i2c.h"
 #include "bsp_eeprom.h"
+#include "bsp_oled.h"
 
 static const char *TAG = "main";
 
@@ -60,6 +61,9 @@ void app_main(void)
 #elif defined(CONFIG_DEMO_EEPROM)
     ESP_LOGI(TAG, "Running demo: EEPROM");
     bsp_eeprom_demo();
+#elif defined(CONFIG_DEMO_OLED)
+    ESP_LOGI(TAG, "Running demo: OLED");
+    bsp_oled_demo();
 #else
     ESP_LOGE(TAG, "No demo selected! Run 'idf.py menuconfig' to pick a demo.");
 #endif
