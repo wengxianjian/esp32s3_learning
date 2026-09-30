@@ -16,6 +16,7 @@
 #include "bsp_dht11.h"
 #include "bsp_ir_rx.h"
 #include "bsp_ir_tx.h"
+#include "bsp_sdcard.h"
 
 static const char *TAG = "main";
 
@@ -92,6 +93,9 @@ void app_main(void)
 #elif defined(CONFIG_DEMO_IR_TX)
     ESP_LOGI(TAG, "Running demo: IR TX");
     bsp_ir_tx_demo();
+#elif defined(CONFIG_DEMO_SDCARD)
+    ESP_LOGI(TAG, "Running demo: SD card");
+    bsp_sdcard_demo();
 #else
     ESP_LOGE(TAG, "No demo selected! Run 'idf.py menuconfig' to pick a demo.");
 #endif

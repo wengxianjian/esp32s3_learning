@@ -72,6 +72,9 @@ config DEMO_IR_RX
 
 config DEMO_IR_TX
     bool "Infrared TX (NEC encode)"
+
+config DEMO_SDCARD
+    bool "SD card (SPI + FAT, write/read file)"
 endchoice
 
 endmenu
