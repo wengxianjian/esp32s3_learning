@@ -96,6 +96,18 @@ config DEMO_WIFI_AP
 
 config DEMO_WIFI_SMARTCONFIG
     bool "WiFi SmartConfig (ESPTouch)"
+
+config DEMO_UDP
+    bool "UDP echo server"
+
+config DEMO_TCP_CLIENT
+    bool "TCP client"
+
+config DEMO_TCP_SERVER
+    bool "TCP server (echo)"
+
+config DEMO_MQTT
+    bool "MQTT (publish/subscribe)"
 endchoice
 
 menu "WiFi Config"
@@ -114,6 +126,26 @@ config WIFI_AP_SSID
 config WIFI_AP_PASS
     string "WiFi AP Password"
     default "12345678"
+endmenu
+
+menu "Socket Config"
+config SOCKET_REMOTE_IP
+    string "Remote server IP"
+    default "192.168.1.100"
+
+config SOCKET_PORT
+    int "Socket port"
+    default 8080
+endmenu
+
+menu "MQTT Config"
+config MQTT_BROKER_URI
+    string "MQTT broker URI"
+    default "mqtt://test.mosquitto.org"
+
+config MQTT_TOPIC
+    string "MQTT topic"
+    default "esp32s3/test"
 endmenu
 
 endmenu

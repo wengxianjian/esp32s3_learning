@@ -22,6 +22,8 @@
 #include "bsp_i2s.h"
 #include "bsp_usb.h"
 #include "bsp_wifi.h"
+#include "bsp_net.h"
+#include "bsp_mqtt.h"
 
 static const char *TAG = "main";
 
@@ -122,6 +124,18 @@ void app_main(void)
 #elif defined(CONFIG_DEMO_WIFI_SMARTCONFIG)
     ESP_LOGI(TAG, "Running demo: WiFi SmartConfig");
     bsp_wifi_smartconfig_demo();
+#elif defined(CONFIG_DEMO_UDP)
+    ESP_LOGI(TAG, "Running demo: UDP");
+    bsp_udp_demo();
+#elif defined(CONFIG_DEMO_TCP_CLIENT)
+    ESP_LOGI(TAG, "Running demo: TCP client");
+    bsp_tcp_client_demo();
+#elif defined(CONFIG_DEMO_TCP_SERVER)
+    ESP_LOGI(TAG, "Running demo: TCP server");
+    bsp_tcp_server_demo();
+#elif defined(CONFIG_DEMO_MQTT)
+    ESP_LOGI(TAG, "Running demo: MQTT");
+    bsp_mqtt_demo();
 #else
     ESP_LOGE(TAG, "No demo selected! Run 'idf.py menuconfig' to pick a demo.");
 #endif

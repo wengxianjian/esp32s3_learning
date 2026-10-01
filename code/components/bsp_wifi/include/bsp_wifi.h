@@ -13,6 +13,9 @@ extern "C" {
 /** 通用初始化：NVS + netif + 事件循环 + WiFi 驱动 */
 esp_err_t bsp_wifi_init(void);
 
+/** 连接 WiFi（STA 模式，阻塞直到拿到 IP） */
+esp_err_t bsp_wifi_sta_connect(void);
+
 /** WiFi 扫描示例（第四十八章） */
 void bsp_wifi_scan_demo(void);
 
