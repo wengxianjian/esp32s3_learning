@@ -64,3 +64,15 @@
 |------|--------|----------|----------|------|
 | Flash 模拟 U 盘 | `BSP_USB_MSC` | `components/bsp_usb` | 第四十五章 | ✅ 已完成 |
 | SD 卡模拟 U 盘 | `BSP_USB_MSC` | `components/bsp_usb` | 第四十六章 | ⏸ 暂缓（需 SD 卡 + SDSPI MSC 适配） |
+
+### M5 网络
+| 资源 | 宏前缀 | 组件目录 | 指南章节 | 状态 |
+|------|--------|----------|----------|------|
+| lwIP / WiFi 扫描 | `BSP_WIFI` | `components/bsp_wifi` | 第四十七/四十八章 | ✅ 已完成 |
+| WiFi STA（连路由） | `BSP_WIFI` | `components/bsp_wifi` | 第四十九章 | ✅ 已完成 |
+| WiFi AP（热点） | `BSP_WIFI` | `components/bsp_wifi` | 第五十章 | ✅ 已完成 |
+| WiFi 一键配网 | `BSP_WIFI` | `components/bsp_wifi` | 第五十一章 | ✅ 已完成 |
+| UDP | `BSP_SOCKET` | `components/bsp_net` | 第五十二章 | ⬜ 待学习 |
+| TCP Client | `BSP_SOCKET` | `components/bsp_net` | 第五十三章 | ⬜ 待学习 |
+| TCP Server | `BSP_SOCKET` | `components/bsp_net` | 第五十四章 | ⬜ 待学习 |
+| MQTT | `BSP_MQTT` | `components/bsp_mqtt` | 第五十五章 | ⬜ 待学习 |

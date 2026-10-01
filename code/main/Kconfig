@@ -84,6 +84,36 @@ config DEMO_AUDIO
 
 config DEMO_USB
     bool "USB MSC (Flash as U-disk)"
+
+config DEMO_WIFI_SCAN
+    bool "WiFi scan"
+
+config DEMO_WIFI_STA
+    bool "WiFi STA (connect router)"
+
+config DEMO_WIFI_AP
+    bool "WiFi AP (hotspot)"
+
+config DEMO_WIFI_SMARTCONFIG
+    bool "WiFi SmartConfig (ESPTouch)"
 endchoice
+
+menu "WiFi Config"
+config WIFI_STA_SSID
+    string "WiFi STA SSID"
+    default "ALIENTEK"
+
+config WIFI_STA_PASS
+    string "WiFi STA Password"
+    default "12345678"
+
+config WIFI_AP_SSID
+    string "WiFi AP SSID"
+    default "DNESP32S3-AP"
+
+config WIFI_AP_PASS
+    string "WiFi AP Password"
+    default "12345678"
+endmenu
 
 endmenu
