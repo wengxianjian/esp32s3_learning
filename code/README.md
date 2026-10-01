@@ -50,5 +50,6 @@ idf.py -p /dev/cu.usbmodem* flash monitor # 编译+烧录+串口监视（免按�
 - **M2 通信总线与器件群** ✅：I2C(XL9555/EEPROM/OLED/AP3216C/QMA6100P)、SPI LCD、单总线(DS18B20/DHT11)、红外收发
 - **M3 显示与媒体** ✅：SD 卡(SPI)、SPIFFS、I2S 音频（RGB LCD/触摸/摄像头无硬件跳过）
 - **M4 USB** ✅：Flash 模拟 U 盘（SD 卡模拟 U 盘暂缓，需 SD 卡 + SDSPI MSC 适配）
+- **M5 网络** ✅：WiFi（扫描/STA/AP/配网）、lwIP Socket（UDP/TCP）、MQTT
 
 详细逐资源状态见 `RESOURCES.md`。
