@@ -81,6 +81,9 @@ config DEMO_SPIFFS
 
 config DEMO_AUDIO
     bool "I2S audio (ES8388, 1kHz tone)"
+
+config DEMO_USB
+    bool "USB MSC (Flash as U-disk)"
 endchoice
 
 endmenu

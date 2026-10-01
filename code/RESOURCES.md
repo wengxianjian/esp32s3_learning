@@ -62,5 +62,5 @@
 ### M4 USB
 | 资源 | 宏前缀 | 组件目录 | 指南章节 | 状态 |
 |------|--------|----------|----------|------|
-| Flash 模拟 U 盘 | `BSP_USB_MSC` | `components/bsp_usb` | 第四十五章 | ⬜ 待学习 |
+| Flash 模拟 U 盘 | `BSP_USB_MSC` | `components/bsp_usb` | 第四十五章 | ✅ 已完成 |
 | SD 卡模拟 U 盘 | `BSP_USB_MSC` | `components/bsp_usb` | 第四十六章 | ⬜ 待学习 |

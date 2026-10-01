@@ -20,6 +20,7 @@
 #include "bsp_spiffs.h"
 #include "bsp_es8388.h"
 #include "bsp_i2s.h"
+#include "bsp_usb.h"
 
 static const char *TAG = "main";
 
@@ -105,6 +106,9 @@ void app_main(void)
 #elif defined(CONFIG_DEMO_AUDIO)
     ESP_LOGI(TAG, "Running demo: Audio");
     bsp_audio_demo();
+#elif defined(CONFIG_DEMO_USB)
+    ESP_LOGI(TAG, "Running demo: USB MSC");
+    bsp_usb_msc_demo();
 #else
     ESP_LOGE(TAG, "No demo selected! Run 'idf.py menuconfig' to pick a demo.");
 #endif
