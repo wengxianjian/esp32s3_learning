@@ -45,4 +45,10 @@ idf.py -p /dev/cu.usbmodem* flash monitor # 编译+烧录+串口监视（免按�
 
 ## 当前进度
 
-见 `RESOURCES.md` 索引表（学习状态列）。
+- **M0 环境跑通** ✅：工程骨架 + LED（编译/烧录/验证链路）
+- **M1 基础外设** ✅：按键/中断/串口/软硬定时器/看门狗/软硬 PWM/ADC/RTC/RNG/内部温度
+- **M2 通信总线与器件群** ✅：I2C(XL9555/EEPROM/OLED/AP3216C/QMA6100P)、SPI LCD、单总线(DS18B20/DHT11)、红外收发
+- **M3 显示与媒体** ✅：SD 卡(SPI)、SPIFFS、I2S 音频（RGB LCD/触摸/摄像头无硬件跳过）
+- **M4 USB** ✅：Flash 模拟 U 盘（SD 卡模拟 U 盘暂缓，需 SD 卡 + SDSPI MSC 适配）
+
+详细逐资源状态见 `RESOURCES.md`。
