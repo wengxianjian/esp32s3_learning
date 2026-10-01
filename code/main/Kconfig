@@ -75,6 +75,9 @@ config DEMO_IR_TX
 
 config DEMO_SDCARD
     bool "SD card (SPI + FAT, write/read file)"
+
+config DEMO_SPIFFS
+    bool "SPIFFS filesystem (internal flash)"
 endchoice
 
 endmenu
