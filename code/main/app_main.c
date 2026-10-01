@@ -18,6 +18,8 @@
 #include "bsp_ir_tx.h"
 #include "bsp_sdcard.h"
 #include "bsp_spiffs.h"
+#include "bsp_es8388.h"
+#include "bsp_i2s.h"
 
 static const char *TAG = "main";
 
@@ -100,6 +102,9 @@ void app_main(void)
 #elif defined(CONFIG_DEMO_SPIFFS)
     ESP_LOGI(TAG, "Running demo: SPIFFS");
     bsp_spiffs_demo();
+#elif defined(CONFIG_DEMO_AUDIO)
+    ESP_LOGI(TAG, "Running demo: Audio");
+    bsp_audio_demo();
 #else
     ESP_LOGE(TAG, "No demo selected! Run 'idf.py menuconfig' to pick a demo.");
 #endif

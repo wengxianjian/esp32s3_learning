@@ -78,6 +78,9 @@ config DEMO_SDCARD
 
 config DEMO_SPIFFS
     bool "SPIFFS filesystem (internal flash)"
+
+config DEMO_AUDIO
+    bool "I2S audio (ES8388, 1kHz tone)"
 endchoice
 
 endmenu

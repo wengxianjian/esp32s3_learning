@@ -180,6 +180,18 @@ extern "C" {
 #define BSP_SPIFFS_MOUNT_POINT    "/spiffs"
 
 /* ============================================================
+ * I2S 音频 + ES8388 编解码器
+ * 指南：第四十一章 音乐播放器、第四十二章 录音机
+ * ============================================================ */
+#define BSP_ES8388_ADDR           0x10     /* ES8388 7 位地址 */
+#define BSP_I2S_BCK_GPIO          GPIO_NUM_46
+#define BSP_I2S_WS_GPIO           GPIO_NUM_9
+#define BSP_I2S_DO_GPIO           GPIO_NUM_10
+#define BSP_I2S_DI_GPIO           GPIO_NUM_14
+#define BSP_I2S_MCLK_GPIO         GPIO_NUM_3
+#define BSP_AUDIO_SAMPLE_RATE     44100
+
+/* ============================================================
  * RTC / RNG 为芯片内部资源，无引脚宏。
  * 后续资源宏在此按「每学习一个资源就补充一段」的规则追加。
  * ============================================================ */

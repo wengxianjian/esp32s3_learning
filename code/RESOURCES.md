@@ -54,7 +54,7 @@
 | RGB/SPI LCD | `BSP_LCD` | `components/bsp_lcd` | 第二十二/三十四章 | ⬜ 待学习 |
 | 触摸 | `BSP_TOUCH` | `components/bsp_lcd` | 第三十四章 | ⬜ 待学习 |
 | 摄像头 | `BSP_CAMERA` | `components/bsp_camera` | 第三十五/三十六章 | ⬜ 待学习 |
-| I2S 音频播放/录音 | `BSP_AUDIO` | `components/bsp_audio` | 第四十一/四十二章 | ⬜ 待学习 |
+| I2S 音频播放/录音 | `BSP_AUDIO` | `components/bsp_audio` | 第四十一/四十二章 | ✅ 已完成 |
 | SD 卡(SPI) | `BSP_SDCARD` | `components/bsp_sdcard` | 第三十七章 | ✅ 已完成 |
 | SPIFFS 文件系统 | `BSP_SPIFFS` | `components/bsp_sdcard` | 第三十八章 | ✅ 已完成 |
 | 汉字/图片/视频显示 | `BSP_LCD` | `components/bsp_lcd` | 第三十九~四十三章 | ⬜ 待学习 |
