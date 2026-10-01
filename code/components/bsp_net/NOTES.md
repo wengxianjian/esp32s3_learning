@@ -12,4 +12,6 @@
 
 ## 验证结果
 
-（烧录后补充）
+- ✅ UDP：`UDP listening on port 8080`（IP 192.168.1.22）
+- ✅ TCP server：`TCP server listening on port 8080`
+- 待验证：TCP client（需 PC 端跑 server）

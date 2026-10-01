@@ -18,4 +18,5 @@
 
 - ✅ WiFi 扫描：`WiFi init OK`，扫到 13 个 AP（SSID/RSSI/加密方式均正常）
 - ✅ WiFi AP：`AP started: SSID=DNESP32S3-AP`
-- 待验证：STA 连接（需真实 WiFi 账号）、SmartConfig 配网
+- ✅ WiFi STA：连接 `ChinaNet-bFwN` 成功，`got IP: 192.168.1.22`
+- 待验证：SmartConfig 配网

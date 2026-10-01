@@ -11,4 +11,4 @@
 
 ## 验证结果
 
-（烧录后补充）
+- ✅ MQTT：连接 `test.mosquitto.org` 成功，订阅/发布 `esp32s3/test` 并收到回显
