@@ -1,3 +1,40 @@
+/**
+ * @file bsp_oled.c
+ * @brief SSD1306 OLED 板级驱动实现（独立 I2C1：SCL=IO4 / SDA=IO5，128x64）
+ *
+ * ── 整体功能 ─────────────────────────────────────────────────
+ * 本文件驱动常见的 SSD1306 OLED（128x64 单色）：
+ *   oled_write_cmd()       —— 内部：发送一个命令字节
+ *   oled_write_data()      —— 内部：发送一段显示数据字节
+ *   bsp_oled_init()        —— 初始化 I2C1 + DC 引脚 + SSD1306 配置序列，并清屏
+ *   bsp_oled_clear()       —— 清空显存并整屏刷新
+ *   bsp_oled_show_string() —— 在指定页/列显示 8x16 ASCII 字符串
+ *
+ * ── 工作原理 / 数据流 ────────────────────────────────────────
+ * SSD1306 屏 128x64，显存按「页（Page）模式」组织：8 页 × 128 列，每页 8 行像素；
+ * 显存中每个字节代表同一列上的 8 个纵向像素（bit0 在上、bit7 在下）。
+ *   I2C 传输时每帧先发一个「控制字节」区分命令/数据：
+ *     0x00 = 后续是命令流，0x40 = 后续是显示数据流。
+ *   写显存时先用三条命令定位：0xB0+page 设页地址、0x00 设列低 4 位、0x10 设列高 4 位，
+ *   再连续写 128 字节填满一整页。
+ *   刷新流程：先把要显示的内容组进软件显存 s_gram[8][128]，再逐页写入 SSD1306。
+ * 本文件自带 8x16 ASCII 点阵字库 font8x16：其编码为「行式」（每字符 16 字节，
+ * 每字节含 8 个横向点，bit7 在最左）。而页模式需要「列式」（每字节是 8 个纵向点），
+ * 两者不一致，故显示时需把行式点阵转置为列式（见 bsp_oled_show_string）。
+ *
+ * ── 配置来源 ─────────────────────────────────────────────────
+ * 引脚/地址来自 board.h：BSP_I2C1_SCL_GPIO=IO4、BSP_I2C1_SDA_GPIO=IO5、
+ * BSP_OLED_ADDR=0x3C、BSP_OLED_DC_GPIO=IO38。本文件不写死地址（时钟 400kHz 为字面量）。
+ * 指南章节：第二十一章 IIC_OLED实验。
+ *
+ * ── 注意事项 / 踩坑 ──────────────────────────────────────────
+ * 1) OLED 走独立 I2C1（模块专用接口），与 XL9555/传感器用的 I2C0 物理隔离。
+ * 2) DC 引脚必须置低选择 I2C 模式（置高会进入 SPI 模式，屏幕不响应）。
+ * 3) COM 扫描方向用 0xC0（与正点原子模块一致），否则画面可能上下翻转。
+ * 4) bsp_oled_show_string 的 y 为「页号」，应取 0/2/4/6；x 为列号，每字符占 8 列。
+ * 5) 每次 show_string 都会把整屏 8 页全部重刷一遍（实现简单但较慢）。
+ */
+
 #include "bsp_oled.h"
 #include "board.h"
 #include "driver/i2c.h"
@@ -7,12 +44,14 @@
 #include "esp_log.h"
 #include <string.h>
 
+/* 日志标签：本文件日志统一显示为 "bsp_oled" */
 static const char *TAG = "bsp_oled";
 
-/* 128x64 OLED：8 页 x 128 列 */
+/* 软件显存：128x64 OLED 共 8 页 x 128 列，s_gram[页][列]，
+ * 每字节 8 个纵向像素（bit0 在上、bit7 在下）；先在此组好内容再整体刷新到屏 */
 static uint8_t s_gram[8][128];
 
-/* 8x16 ASCII 字库（0x20 ~ 0x7E），每字符 16 字节（每字节一行，高位在左） */
+/* 8x16 ASCII 字库（0x20 ~ 0x7E，共 95 个字符），每字符 16 字节（每字节一行，高位在左） */
 static const uint8_t font8x16[95][16] = {
     {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00}, /* ' ' */
     {0x00,0x00,0x00,0x18,0x3C,0x3C,0x3C,0x18,0x18,0x18,0x00,0x18,0x18,0x00,0x00,0x00}, /* '!' */
@@ -111,35 +150,65 @@ static const uint8_t font8x16[95][16] = {
     {0x00,0x00,0x76,0xDC,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00}, /* '~' */
 };
 
+/**
+ * @brief 内部：向 SSD1306 发送一个命令字节
+ *
+ * @param cmd 命令字节
+ * @return ESP_OK 成功；其它为 I2C 错误码
+ *
+ * 逻辑流程：命令帧 = 控制字节 0x00 + 命令字节，一次 I2C 写事务发出。
+ */
 static esp_err_t oled_write_cmd(uint8_t cmd)
 {
     uint8_t buf[2] = {0x00, cmd};   /* 控制字节 0x00 = 命令 */
-    i2c_cmd_handle_t c = i2c_cmd_link_create();
-    i2c_master_start(c);
-    i2c_master_write_byte(c, (BSP_OLED_ADDR << 1) | I2C_MASTER_WRITE, true);
-    i2c_master_write(c, buf, 2, true);
-    i2c_master_stop(c);
-    esp_err_t ret = i2c_master_cmd_begin(I2C_NUM_1, c, pdMS_TO_TICKS(1000));
-    i2c_cmd_link_delete(c);
+    i2c_cmd_handle_t c = i2c_cmd_link_create();                                   /* 新建命令链 */
+    i2c_master_start(c);                                                          /* 起始位 */
+    i2c_master_write_byte(c, (BSP_OLED_ADDR << 1) | I2C_MASTER_WRITE, true);      /* 器件地址 + 写位 */
+    i2c_master_write(c, buf, 2, true);                                            /* 发「控制字节+命令」共 2 字节 */
+    i2c_master_stop(c);                                                           /* 停止位 */
+    esp_err_t ret = i2c_master_cmd_begin(I2C_NUM_1, c, pdMS_TO_TICKS(1000));      /* 提交（I2C1），超时 1s */
+    i2c_cmd_link_delete(c);                                                       /* 释放命令链 */
     return ret;
 }
 
+/**
+ * @brief 内部：向 SSD1306 发送一段显示数据
+ *
+ * @param data 数据缓冲区
+ * @param len  字节数
+ * @return ESP_OK 成功；其它为 I2C 错误码
+ *
+ * 逻辑流程：数据帧 = 控制字节 0x40 + 连续 len 字节数据，一次 I2C 写事务发出。
+ */
 static esp_err_t oled_write_data(const uint8_t *data, size_t len)
 {
-    i2c_cmd_handle_t c = i2c_cmd_link_create();
-    i2c_master_start(c);
-    i2c_master_write_byte(c, (BSP_OLED_ADDR << 1) | I2C_MASTER_WRITE, true);
+    i2c_cmd_handle_t c = i2c_cmd_link_create();                                   /* 新建命令链 */
+    i2c_master_start(c);                                                          /* 起始位 */
+    i2c_master_write_byte(c, (BSP_OLED_ADDR << 1) | I2C_MASTER_WRITE, true);      /* 器件地址 + 写位 */
     i2c_master_write_byte(c, 0x40, true);   /* 控制字节 0x40 = 数据 */
-    i2c_master_write(c, data, len, true);
-    i2c_master_stop(c);
-    esp_err_t ret = i2c_master_cmd_begin(I2C_NUM_1, c, pdMS_TO_TICKS(1000));
-    i2c_cmd_link_delete(c);
+    i2c_master_write(c, data, len, true);                                         /* 连发 len 字节显示数据 */
+    i2c_master_stop(c);                                                           /* 停止位 */
+    esp_err_t ret = i2c_master_cmd_begin(I2C_NUM_1, c, pdMS_TO_TICKS(1000));      /* 提交（I2C1），超时 1s */
+    i2c_cmd_link_delete(c);                                                       /* 释放命令链 */
     return ret;
 }
 
+/**
+ * @brief 初始化 OLED：配置 I2C1 → 拉低 DC 引脚 → 发 SSD1306 配置序列 → 清屏
+ *
+ * 逻辑流程：
+ *   ① 配置并安装 I2C1 主机（引脚/频率来自 board.h）
+ *   ② 把 DC 引脚配成输出并置低，选择 I2C 模式
+ *   ③ 逐条发送 SSD1306 初始化命令序列（见数组内注释）
+ *   ④ 打印成功日志并清屏
+ *
+ * @return ESP_OK 成功；其它为 I2C 错误码
+ */
 esp_err_t bsp_oled_init(void)
 {
-    /* 1. 配置 I2C1 */
+    /* 1. 配置 I2C1
+     *    OLED 走独立 I2C1（模块专用接口）；sda/scl 引脚取自 board.h；
+     *    clk_speed 400kHz（此处为字面量，SSD1306 支持快速模式）。 */
     i2c_config_t cfg = {
         .mode = I2C_MODE_MASTER,
         .sda_io_num = BSP_I2C1_SDA_GPIO,
@@ -148,67 +217,110 @@ esp_err_t bsp_oled_init(void)
         .scl_pullup_en = GPIO_PULLUP_ENABLE,
         .master.clk_speed = 400000,
     };
-    esp_err_t ret = i2c_param_config(I2C_NUM_1, &cfg);
+    esp_err_t ret = i2c_param_config(I2C_NUM_1, &cfg);          /* 写入参数 */
     if (ret != ESP_OK) return ret;
-    ret = i2c_driver_install(I2C_NUM_1, I2C_MODE_MASTER, 0, 0, 0);
+    ret = i2c_driver_install(I2C_NUM_1, I2C_MODE_MASTER, 0, 0, 0);/* 安装 I2C1 主机驱动 */
     if (ret != ESP_OK) return ret;
 
-    /* 2. DC 引脚置低（选择 I2C 模式） */
+    /* 2. DC 引脚置低（选择 I2C 模式）。
+     *    DC 高=SPI、低=I2C；本模块只用 I2C，故固定拉低。 */
     gpio_config_t dc = {
-        .pin_bit_mask = 1ULL << BSP_OLED_DC_GPIO,
+        .pin_bit_mask = 1ULL << BSP_OLED_DC_GPIO,   /* 位掩码选中 DC 引脚 */
         .mode = GPIO_MODE_OUTPUT,
         .pull_up_en = GPIO_PULLUP_DISABLE,
         .pull_down_en = GPIO_PULLUP_DISABLE,
         .intr_type = GPIO_INTR_DISABLE,
     };
-    gpio_config(&dc);
-    gpio_set_level(BSP_OLED_DC_GPIO, 0);
+    gpio_config(&dc);                               /* 应用 GPIO 配置 */
+    gpio_set_level(BSP_OLED_DC_GPIO, 0);            /* 置低：选择 I2C 模式 */
 
-    /* 3. SSD1306 初始化序列（扁平命令数组） */
+    /* 3. SSD1306 初始化序列（扁平命令数组，按顺序逐条发送）。
+     *    带参数的命令以「命令+参数」成对出现，展开说明如下：
+     *      0xAE           显示关（初始化阶段先关屏，避免花屏）
+     *      0xD5,0x80      时钟分频比 / 振荡频率
+     *      0xA8,0x3F      多路复用比 = 63（对应 64 行）
+     *      0xD3,0x00      显示垂直偏移 = 0
+     *      0x40           显示起始行 = 0
+     *      0x8D,0x14      使能内部电荷泵（不使能屏幕不亮）
+     *      0x20,0x02      内存寻址模式 = 页模式（便于按页刷新）
+     *      0xA1           段重映射（决定左右方向）
+     *      0xC0           COM 扫描方向（决定上下方向，与正点原子模块一致）
+     *      0xDA,0x12      COM 引脚硬件配置
+     *      0x81,0xEF      对比度 = 0xEF
+     *      0xD9,0xF1      预充电周期
+     *      0xDB,0x30      VCOMH 取消选择电平
+     *      0xA4           从 RAM 恢复显示
+     *      0xA6           正常显示（非反色）
+     *      0xAF           显示开 */
     static const uint8_t init_seq[] = {
         0xAE, 0xD5, 0x80, 0xA8, 0x3F, 0xD3, 0x00, 0x40,
         0x8D, 0x14, 0x20, 0x02, 0xA1, 0xC0, 0xDA, 0x12,
         0x81, 0xEF, 0xD9, 0xF1, 0xDB, 0x30, 0xA4, 0xA6, 0xAF,
     };
-    for (size_t i = 0; i < sizeof(init_seq); i++) {
+    for (size_t i = 0; i < sizeof(init_seq); i++) {   /* 逐条发送（sizeof=25 条命令） */
         oled_write_cmd(init_seq[i]);
     }
 
+    /* 4. 打印成功日志并用清屏收尾 */
     ESP_LOGI(TAG, "OLED init OK (addr 0x%02x, I2C1)", BSP_OLED_ADDR);
     return bsp_oled_clear();
 }
 
+/**
+ * @brief 清屏：清空软件显存并把 8 页全部刷新到屏
+ *
+ * @return ESP_OK（内部忽略写命令的返回值，简化处理）
+ *
+ * 逻辑流程：
+ *   ① 把软件显存 s_gram 全部清零
+ *   ② 逐页定位（页地址 / 列低 4 位 / 列高 4 位）并把该页 128 字节写入屏幕
+ */
 esp_err_t bsp_oled_clear(void)
 {
-    memset(s_gram, 0, sizeof(s_gram));
-    for (uint8_t page = 0; page < 8; page++) {
-        oled_write_cmd(0xB0 + page);
-        oled_write_cmd(0x00);
-        oled_write_cmd(0x10);
-        oled_write_data(s_gram[page], 128);
+    memset(s_gram, 0, sizeof(s_gram));   /* ① 全显存清零（sizeof=8*128=1024 字节） */
+    for (uint8_t page = 0; page < 8; page++) {   /* ② 逐页刷新，共 8 页 */
+        oled_write_cmd(0xB0 + page);             /* 设置页起始地址 = 0xB0 + 页号 */
+        oled_write_cmd(0x00);                    /* 列地址低 4 位 = 0 */
+        oled_write_cmd(0x10);                    /* 列地址高 4 位 = 0（列 0 起） */
+        oled_write_data(s_gram[page], 128);      /* 写满一整页 128 列 */
     }
     return ESP_OK;
 }
 
+/**
+ * @brief 在指定位置显示一个 8x16 ASCII 字符串
+ *
+ * 逻辑流程：
+ *   ① 逐字符取出字库点阵（行式），把每个字符的 16 行转置成页模式的两列字节
+ *      （上半 8 行 → 页 y，下半 8 行 → 页 y+1），写入软件显存 s_gram
+ *   ② 全部字符处理完后，把整屏 8 页刷新到 SSD1306
+ *
+ * @param x   起始列（0~127），每个字符占 8 列
+ * @param y   起始页（0/2/4/6，表示 4 行），每行字符跨 2 页
+ * @param str 以 '\0' 结尾的 ASCII 字符串
+ */
 void bsp_oled_show_string(uint8_t x, uint8_t y, const char *str)
 {
+    /* 逐字符处理：当前字符非空 且 剩余宽度还放得下 8 列（x <= 127-8）才继续 */
     while (*str && x <= 127 - 8) {
-        const uint8_t *g = font8x16[*str - 0x20];
+        const uint8_t *g = font8x16[*str - 0x20];   /* 字库下标：ASCII 减 0x20（字库从空格开始） */
         /* 字库为“行式”（每字节 8 个横向点），转置为页模式“列式” */
-        for (uint8_t j = 0; j < 8; j++) {
-            uint8_t top = 0, bottom = 0;
-            for (uint8_t k = 0; k < 8; k++) {
+        for (uint8_t j = 0; j < 8; j++) {           /* j：字符的第 j 列（横向） */
+            uint8_t top = 0, bottom = 0;            /* 分别汇总该列上半/下半的纵向 8 个像素 */
+            for (uint8_t k = 0; k < 8; k++) {       /* k：纵向第 k 行 */
+                /* 0x80>>j 取该行第 j 个横向点（bit7 在最左）；为 1 则把纵向第 k 位置 1 */
                 if (g[k] & (0x80 >> j))     top |= (1 << k);
                 if (g[8 + k] & (0x80 >> j)) bottom |= (1 << k);
             }
-            s_gram[y][x + j] = top;
-            if (y + 1 < 8) {
-                s_gram[y + 1][x + j] = bottom;
+            s_gram[y][x + j] = top;                 /* 上半字写入页 y */
+            if (y + 1 < 8) {                        /* 防越界：y 已是最后一页时不写下一页 */
+                s_gram[y + 1][x + j] = bottom;      /* 下半字写入页 y+1 */
             }
         }
-        x += 8;
-        str++;
+        x += 8;     /* 每字符宽 8 列，移到下一字符位置 */
+        str++;      /* 处理下一个字符 */
     }
+    /* 组好显存后整屏刷新：逐页定位（页地址 / 列低 4 位 / 列高 4 位）后写 128 字节 */
     for (uint8_t page = 0; page < 8; page++) {
         oled_write_cmd(0xB0 + page);
         oled_write_cmd(0x00);
