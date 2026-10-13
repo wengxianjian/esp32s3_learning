@@ -83,11 +83,14 @@ extern "C" {
  * ADC（模数转换）
  * 指南：第二十四章 ADC实验
  * 通道：ADC1_CHANNEL_7 = GPIO8（ADC_IN 排针）
+ *
+ * 说明：ADC 的这三个宏是「资源宏字典」的一部分，只在此处定义一次，
+ * bsp_adc.c 只引用它们、不写死数字。改量程/通道只需改这里。
  * ============================================================ */
-#define BSP_ADC_UNIT              ADC_UNIT_1
-#define BSP_ADC_CHANNEL           ADC_CHANNEL_7
-#define BSP_ADC_ATTEN             ADC_ATTEN_DB_11    /* 量程约 0~3.1V */
-#define BSP_ADC_BITWIDTH          ADC_BITWIDTH_12
+#define BSP_ADC_UNIT              ADC_UNIT_1     /* 使用的 ADC 单元：ADC1（不与 Wi-Fi 冲突，优先用） */
+#define BSP_ADC_CHANNEL           ADC_CHANNEL_7  /* ADC1 的第 7 通道，对应 GPIO8 = ADC_IN 排针 */
+#define BSP_ADC_ATTEN             ADC_ATTEN_DB_11 /* 衰减 11dB：输入量程约 0~3.1V */
+#define BSP_ADC_BITWIDTH          ADC_BITWIDTH_12 /* 12 位分辨率：原始值范围 0~4095 */
 
 /* ============================================================
  * 内部温度传感器（TSENS）
